@@ -1,0 +1,15 @@
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Component
+metadata:
+  name:
+  annotations:
+    pipelinesascode: "0"
+    # Not needed when we create a component as it is added later: appstudio.openshift.io/pac-provision: done
+spec:
+  componentName: 
+  application: test-application
+  source:
+    git:
+      url: 
+  containerImage:
+  targetPort: 8081
