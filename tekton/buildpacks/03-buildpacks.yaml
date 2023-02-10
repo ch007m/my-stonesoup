@@ -150,6 +150,7 @@ spec:
         - "-skip-restore=$(params.SKIP_RESTORE)"
         - "-previous-image=$(params.APP_IMAGE)"
         - "-run-image=$(params.RUN_IMAGE)"
+        - "-log-level=debug"
         - "$(params.APP_IMAGE)"
       volumeMounts:
         - name: layers-dir
