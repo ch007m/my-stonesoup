@@ -18,3 +18,8 @@ Play with our Tasks and Pipeline
 kubectl delete -f ./tekton/buildpacks
 kubectl apply -f ./tekton/buildpacks
 ```
+
+You can watch the logs of pipeline using this command:
+```bash
+tkn pipelinerun logs cache-image-pipelinerun
+```
