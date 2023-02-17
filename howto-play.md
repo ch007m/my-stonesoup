@@ -1,14 +1,19 @@
 # Stonesoup installation
 
 * [Quicklab](#quicklab)
+  * [Cluster setup](#cluster-setup)
+  * [Deploy the backend](#deploy-the-backend)
+  * [Install the frontend](#install-the-frontend)
 * [QuickLab URL and credentials](#quicklab-url-and-credentials)
-    * [upi-0.mystone.lab.upshift.rdu2.redhat.com](#upi-0mystonelabupshiftrdu2redhatcom)
-    * [upi-0.snowdrop.lab.psi.pnq2.redhat.com](#upi-0snowdroplabpsipnq2redhatcom)
+  * [upi-0.mystone.lab.upshift.rdu2.redhat.com](#upi-0mystonelabupshiftrdu2redhatcom)
+  * [upi-0.snowdrop.lab.psi.pnq2.redhat.com](#upi-0snowdroplabpsipnq2redhatcom)
 * [CRC](#crc)
-    * [Instructions](#instructions)
+  * [Instructions](#instructions)
 * [Tips](#tips)
 
 ## Quicklab
+
+### Cluster setup
 
 In order to play with Stonesoup, we need an ocp4 cluster with 3 nodes and 3 workers. It can be created
 using the application: `https://quicklab.upshift.redhat.com/`.
@@ -35,6 +40,8 @@ QUICK_LAB_HOST=<QUICK_LAB_HOSTNAME>
 konfig merge --save config/ql_ocp4.cfg
 kubecontext admin
 ```
+
+### Deploy the backend
 
 Clone locally the fork of the git repository: `https://github.com/redhat-appstudio/infra-deployments/`
 
@@ -74,6 +81,10 @@ Open the ocp & argocd console
 open https://console-openshift-console.apps.$QUICK_LAB_DOMAIN
 open https://openshift-gitops-server-openshift-gitops.apps.$QUICK_LAB_DOMAIN
 ```
+
+### Install the frontend
+
+TODO
 
 ## QuickLab URL and credentials
 
