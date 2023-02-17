@@ -60,7 +60,7 @@ kubectl create secret docker-registry -n build-templates redhat-appstudio-user-w
 ```
 
 Open the ocp & argocd console
-```
+```text
 open https://console-openshift-console.apps.$QUICK_LAB_DOMAIN
 open https://openshift-gitops-server-openshift-gitops.apps.$QUICK_LAB_DOMAIN
 ```
@@ -69,12 +69,15 @@ open https://openshift-gitops-server-openshift-gitops.apps.$QUICK_LAB_DOMAIN
 
 ### upi-0.mystone.lab.upshift.rdu2.redhat.com
 
+```text
 https://quicklab.upshift.redhat.com/clusters/49460
 Username: quicklab
 QUICK_LAB_HOST: upi-0.mystone.lab.upshift.rdu2.redhat.com
+```
 
 ### upi-0.snowdrop.lab.psi.pnq2.redhat.com
 
+```text
 https://quicklab.upshift.redhat.com/clusters/49430
 
 Username: quicklab
@@ -87,6 +90,7 @@ kubeadmin : DCvcE-3BBpx-UTqF3-sAhFq
 
 open https://console-openshift-console.apps.snowdrop.lab.upshift.rdu2.redhat.com
 open https://openshift-gitops-server-openshift-gitops.apps.snowdrop.lab.upshift.rdu2.redhat.com
+```
 
 ### Tips
 
@@ -94,15 +98,14 @@ open https://openshift-gitops-server-openshift-gitops.apps.snowdrop.lab.upshift.
 k get pod -o=json | jq '.items[]|select(any( .status.containerStatuses[]; .state.waiting.reason=="ImagePullBackOff"))|.metadata.name'
 ```
 
-
-
 ## CRC
 
 https://crc.dev/crc/#introducing_gsg
 https://redhat-appstudio.github.io/infra-deployments/docs/development/deployment.html
 
 ### Instructions
-```
+
+```bash
 mkdir stonesoup && cd stonesoup
 wget https://developers.redhat.com/content-gateway/rest/mirror/pub/openshift-v4/clients/crc/latest/crc-linux-amd64.tar.xz
 tar -vxf crc-linux-amd64.tar.xz
@@ -116,7 +119,6 @@ echo 'export PATH=$PATH:$HOME/.crc/bin' >> ~/.bashrc
 cat <<EOF > secret.json
 {"auths":{"cloud.openshift.com":{"auth":"b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K2Ntb3VsbGlhMWpqZjBqbWVoa2JhMW1sY3ZoNHR0d2F0ZW1iOlYxOU5YQ1BXWjJVSDkxMjFPN0JTUkxCWThSN0owS0lPMjQwNjdRNEVEOUg3OUNPQzZZWlNBNzlCQzg4R0dRQ0s=","email":"cmoullia@redhat.com"},"quay.io":{"auth":"b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K2Ntb3VsbGlhMWpqZjBqbWVoa2JhMW1sY3ZoNHR0d2F0ZW1iOlYxOU5YQ1BXWjJVSDkxMjFPN0JTUkxCWThSN0owS0lPMjQwNjdRNEVEOUg3OUNPQzZZWlNBNzlCQzg4R0dRQ0s=","email":"cmoullia@redhat.com"},"registry.connect.redhat.com":{"auth":"NTA5ODY1ODh8dWhjLTFKSmYwSm1FSGtCYTFtbEN2SDRUdFdBVEVtYjpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSTJaVGhpTnpoak5HRmxabUkwTldWbU9UVmxNakpsTXpVd09UaGxaVEF6TXlKOS5zY3dGai1hc0RFYmNMUHNzWHgwdmNhUTZybEc4WVpLSW04Y0FWUFI0ZVpzVWtva2FXNVBIYWppOU9USi1mejFDWF84LXhjWnlMQmxLY0lqdVJheGVDTGowQUR3LXh6cHdibms0T3lmbHJ0eGVxVDM1TUZpMGtKOHZDTGNmOFFxdDAyTFBrSzhfYVRYVXd3cTJ1eEl5U3dHTWswN0MwSEgwLTRtTlpPWHhsRmpwdnlUeGRUSEJYM0wzQ19LbTM2MGhlMlBUdHBrMm13REZ6TkhpUG9RdjA5MXpSVXZnMzFFemNkeE0wYnh3Mkt3c1ZsT3RncEdmODhVYk1yMU1lNVQ2SkVYMkFTeTRQSXdQSlg3RVNSdVp4YlBnX0VHUUZoNUY1akZlU1hWUVJMTHVpWDgzT2lzclFmSFo4TkhkLXdnOXJ5eVQxbXlybWhVRndNTlViX2xxb3NobEtPd1N4YXlKaTFhLWhVQmtPVmt0QXhCbGRZdUJsV2FnSzctcl8tT1hoWm5QSFNwYnJPSG9PT21MaHl0VEh4OElWTTlJZ2c1cjYyTFFIUnJ2NWR6bkJZbEhqOGo2OXZYbkFiMFZKVldJOFdlTlBlQkRvWlVnSkhmUnRLblBqUlpLM09qZkp4c1ZmSHZCMFpvMGZHTFBLSXhCV1F1WVFWeEJVeFFzY3R1QmNrOW5tX0E3S19pWlNRMnAwdHEzR0Z4YWFab041a2xxOFowQzNOcjVMRWJ2dlozWXdDTWp5YzFaSjB0RHRkWGhwR1JwbUVFZER3VmtWc1hJZHpXT3Y2T0gycFBQZEhlX2tmN1FlVE5xeU9wR3FQSzd2aXlqX1B3MjBqdXN0OTlEUkJtVlotU3drV21tb2Iyc1VNRGFtWl83Y1hwQzVqTzNncUtvMFdBVmFHbw==","email":"cmoullia@redhat.com"},"registry.redhat.io":{"auth":"NTA5ODY1ODh8dWhjLTFKSmYwSm1FSGtCYTFtbEN2SDRUdFdBVEVtYjpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSTJaVGhpTnpoak5HRmxabUkwTldWbU9UVmxNakpsTXpVd09UaGxaVEF6TXlKOS5zY3dGai1hc0RFYmNMUHNzWHgwdmNhUTZybEc4WVpLSW04Y0FWUFI0ZVpzVWtva2FXNVBIYWppOU9USi1mejFDWF84LXhjWnlMQmxLY0lqdVJheGVDTGowQUR3LXh6cHdibms0T3lmbHJ0eGVxVDM1TUZpMGtKOHZDTGNmOFFxdDAyTFBrSzhfYVRYVXd3cTJ1eEl5U3dHTWswN0MwSEgwLTRtTlpPWHhsRmpwdnlUeGRUSEJYM0wzQ19LbTM2MGhlMlBUdHBrMm13REZ6TkhpUG9RdjA5MXpSVXZnMzFFemNkeE0wYnh3Mkt3c1ZsT3RncEdmODhVYk1yMU1lNVQ2SkVYMkFTeTRQSXdQSlg3RVNSdVp4YlBnX0VHUUZoNUY1akZlU1hWUVJMTHVpWDgzT2lzclFmSFo4TkhkLXdnOXJ5eVQxbXlybWhVRndNTlViX2xxb3NobEtPd1N4YXlKaTFhLWhVQmtPVmt0QXhCbGRZdUJsV2FnSzctcl8tT1hoWm5QSFNwYnJPSG9PT21MaHl0VEh4OElWTTlJZ2c1cjYyTFFIUnJ2NWR6bkJZbEhqOGo2OXZYbkFiMFZKVldJOFdlTlBlQkRvWlVnSkhmUnRLblBqUlpLM09qZkp4c1ZmSHZCMFpvMGZHTFBLSXhCV1F1WVFWeEJVeFFzY3R1QmNrOW5tX0E3S19pWlNRMnAwdHEzR0Z4YWFab041a2xxOFowQzNOcjVMRWJ2dlozWXdDTWp5YzFaSjB0RHRkWGhwR1JwbUVFZER3VmtWc1hJZHpXT3Y2T0gycFBQZEhlX2tmN1FlVE5xeU9wR3FQSzd2aXlqX1B3MjBqdXN0OTlEUkJtVlotU3drV21tb2Iyc1VNRGFtWl83Y1hwQzVqTzNncUtvMFdBVmFHbw==","email":"cmoullia@redhat.com"}}}
 EOF
-
 
 wget https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz
 tar -vxf openshift-client-linux.tar.gz
