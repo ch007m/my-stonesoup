@@ -126,6 +126,40 @@ Create now the `./hack/nocommit/my-secret.yml` file using the following kubectl 
 ```bash
 kubectl create secret docker-registry quay-cloudservices-pull --from-file=.dockerconfigjson=./hack/nocommit/quay-io-auth.json --dry-run=client -o yaml > ./hack/nocommit/my-secret.yml
 ```
+
+Generate the `FrontendEnvironment` CRD using the script `./hack/update-sso.sh` where the ....
+
+Git clone the following project `clowder` with the parent folder:
+```bash
+cd ..
+git clone https://github.com/RedHatInsights/clowder.git
+```
+**Warning**: If minikube executable is installed locally on your machine, then hack the script `../clowder/build/kube_setup.sh`
+to change the test from `elif command -v minikube; then` to `elif command -v minikubeeeeee; then` to avoid that the script executes the kubectl commands using minikube !
+
+Git clone the following project `crc-k8s-proxy` with the parent folder:
+
+```bash
+git clone https://github.com/jduimovich/crc-k8s-proxy.git
+```
+
+Create an `envfile` file from the `./envfile-template-keycloak` template and set the following 2 parameters `HOSTNAME` and `TOKEN`
+```text
+KEYCLOAK_URL=http://keycloak-svc.dev-sso.svc:8080/auth/realms/redhat-external
+HOSTNAME=<QUICK_LAB_HOSTNAME>
+PROXYSSL=false
+SSL=true
+MODE=complex
+TOKEN=<OCP_LOGIN_TOKEN>
+K8SURL=https://kubernetes.default.svc
+```
+Hack the file `./run-util` and comment the following line 
+```text
+-kubectl config  use-context  "default/api-crc-testing:6443/kubeadmin"
++# kubectl config  use-context  "default/api-crc-testing:6443/kubeadmin"
+```
+TODO
+
 ## QuickLab URL and credentials
 
 ### upi-0.mystone.lab.upshift.rdu2.redhat.com
