@@ -119,6 +119,7 @@ Create a branch using as name the <HOST_NAME> where stonesoup is deployed
 git checkout -b $QUICK_LAB_HOST
 ```
 Copy the folder `./hack/no-commit-templates` to `./hack/nocommit`
+
 Edit the file `quay-io-auth.json` to define your registry account and auth token
 ```json
 {
