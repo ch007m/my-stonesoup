@@ -10,19 +10,19 @@ When the VMs are ready, then install the cluster using the button `New bundle` a
 
 To ssh to the VM, copy locally the `quicklab.key`
 ```bash
-wget https://gitlab.cee.redhat.com/cee_ops/quicklab/raw/master/docs/quicklab.key && chmod 600 quicklab.key
+wget https://gitlab.cee.redhat.com/cee_ops/quicklab/raw/master/docs/quicklab.key -P config && chmod 600 quicklab.key
 
 QUICK_LAB_HOST=<QUICK_LAB_HOSTNAME>
-ssh -i quicklab.key -o "UserKnownHostsFile /dev/null" -o "StrictHostKeyChecking no" -o "IdentitiesOnly yes" quicklab@$QUICK_LAB_HOST
+ssh -i config/quicklab.key -o "UserKnownHostsFile /dev/null" -o "StrictHostKeyChecking no" -o "IdentitiesOnly yes" quicklab@$QUICK_LAB_HOST
 ```
 
 Next, retrieve the kubeconfig file and merge it locally within your `.kube/config` file
 
 ```bash
 QUICK_LAB_HOST=<QUICK_LAB_HOSTNAME>
-./qlssh.sh $QUICK_LAB_HOST "cat /home/quicklab/oc4/auth/kubeconfig" > ql_ocp4.cfg
+./qlssh.sh $QUICK_LAB_HOST "cat /home/quicklab/oc4/auth/kubeconfig" > config/ql_ocp4.cfg
 
-konfig merge --save ql_ocp4.cfg
+konfig merge --save config/ql_ocp4.cfg
 kubecontext admin
 ```
 
@@ -54,7 +54,10 @@ We can now deploy the backend part of stonesoup by executing the following bash 
 ```
 
 **Warning**: If you use an image repository and the env ar `HAS_DEFAULT_IMAGE_REPOSITORY` has been defined, 
-create then a shared secret as such: `kubectl create secret docker-registry -n build-templates redhat-appstudio-user-workload --from-file=.dockerconfigjson=./quay_dockercfg.json"`
+create then a shared secret as such: 
+```bash
+kubectl create secret docker-registry -n build-templates redhat-appstudio-user-workload --from-file=.dockerconfigjson=.config/quay_dockercfg.json
+```
 
 Open the ocp & argocd console
 ```
