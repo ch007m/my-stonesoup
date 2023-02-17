@@ -120,16 +120,8 @@ git checkout -b $QUICK_LAB_HOST
 ```
 Copy the folder `./hack/no-commit-templates` to `./hack/nocommit`
 
-Edit the file `quay-io-auth.json` to define your registry account and auth token
-```json
-{
-  "auths": {
-    "quay.io": {
-      "auth": "Y2gw...khHR1A="
-    }
-  }
-}
-```
+Download your docker credentials to access the quay registry using this link: https://quay.io/organization/<QUAY_ORG>?tab=robots within the file `./hack/quay-io-auth.json` 
+
 Create now the `./hack/nocommit/my-secret.yml` file using the following kubectl command:
 ```bash
 kubectl create secret docker-registry quay-cloudservices-pull --from-file=.dockerconfigjson=./hack/nocommit/quay-io-auth.json --dry-run=client -o yaml > ./hack/nocommit/my-secret.yml
