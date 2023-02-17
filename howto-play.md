@@ -1,5 +1,6 @@
 # Stonesoup installation
 
+* [Pre-requisite](#pre-requisite)
 * [Quicklab](#quicklab)
   * [Cluster setup](#cluster-setup)
   * [Deploy the backend](#deploy-the-backend)
@@ -10,6 +11,11 @@
 * [CRC](#crc)
   * [Instructions](#instructions)
 * [Tips](#tips)
+
+## Pre-requisite
+
+- [Konfig](https://github.com/corneliusweig/konfig) tool able to merge/manage different kube context
+- [Kubectx and kubens](https://github.com/ahmetb/kubectx) to switch between the context or namespace
 
 ## Quicklab
 
@@ -35,11 +41,16 @@ Next, retrieve the kubeconfig file and merge it locally within your `.kube/confi
 
 ```bash
 QUICK_LAB_HOST=<QUICK_LAB_HOSTNAME>
-./qlssh.sh $QUICK_LAB_HOST "cat /home/quicklab/oc4/auth/kubeconfig" > config/ql_ocp4.cfg
-
-konfig merge --save config/ql_ocp4.cfg
-kubecontext admin
+./qlssh.sh $QUICK_LAB_HOST "cat /home/quicklab/oc4/auth/kubeconfig" > config/$QUICK_LAB_HOST.cfg
 ```
+
+Edit the `config/$QUICK_LAB_HOST.cfg` file to rename the context from `admin` to your quicklab host by example (e.g mystone)
+```bash
+konfig import --save config/$QUICK_LAB_HOST.cfg
+kubectx mystone
+```
+
+Log in to the ocp cluster using the token available from the UI at the url: https://oauth-openshift.apps.mystone.lab.upshift.rdu2.redhat.com/oauth/token/request
 
 ### Deploy the backend
 
@@ -100,6 +111,7 @@ TODO
 https://quicklab.upshift.redhat.com/clusters/49460
 Username: quicklab
 QUICK_LAB_HOST: upi-0.mystone.lab.upshift.rdu2.redhat.com
+QUICK_LAB_DOMAIN: mystone.lab.upshift.rdu2.redhat.com
 
 Openshift Kubeconfig Located At:
 upi-0.mystone.lab.upshift.rdu2.redhat.com:/home/quicklab/oc4/auth/kubeconfig

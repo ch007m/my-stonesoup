@@ -10,4 +10,4 @@ if [ -d $1 ]; then
 	echo "Usage: qlssh <host>"
 	exit 1;
 fi
-ssh -i quicklab.key -o "UserKnownHostsFile /dev/null" -o "StrictHostKeyChecking no" -o "IdentitiesOnly yes" quicklab@$1 "${@:2}"
+ssh -i config/quicklab.key -o "UserKnownHostsFile /dev/null" -o "StrictHostKeyChecking no" -o "IdentitiesOnly yes" quicklab@$1 "${@:2}"
