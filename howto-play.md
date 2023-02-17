@@ -1,4 +1,4 @@
-## Quicklab
+## Quicklab & Stonesoup
 
 In order to play with Stonesoup, we need an ocp4 cluster with 3 nodes and 3 workers. It can be created
 using the application: `https://quicklab.upshift.redhat.com/`.
