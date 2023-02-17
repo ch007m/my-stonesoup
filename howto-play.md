@@ -87,7 +87,7 @@ export HAS_DEFAULT_IMAGE_REPOSITORY=quay.io/<QUAY_USER>/<REPOSITORY>
 export DOCKER_IO_AUTH=<Format username:access_token>
 ```
 
-We can now deploy the backend part of stonesoup by executing the following bash script
+Next, deploy the backend part of stonesoup by executing the following bash script
 ```bash
 ./hack/bootstrap-cluster.sh --toolchain --keycloak preview
 ```
@@ -109,8 +109,30 @@ open https://openshift-gitops-server-openshift-gitops.apps.$QUICK_LAB_DOMAIN
 
 ### Install the frontend
 
-TODO
-
+Fork the project https://github.com/jduimovich/standalone-hac.git within a `GIT_HUB_ORG` and clone the project locally
+```bash
+git clone git@github.com:<GIT_HUB_ORG>/standalone-hac.git standalone-hac-fork
+cd standalone-hac-fork
+```
+Create a branch using as name the <HOST_NAME> where stonesoup is deployed
+```bash
+git checkout -b $QUICK_LAB_HOST
+```
+Copy the folder `./hack/no-commit-templates` to `./hack/nocommit`
+Edit the file `quay-io-auth.json` to define your registry account and auth token
+```json
+{
+  "auths": {
+    "quay.io": {
+      "auth": "Y2gw...khHR1A="
+    }
+  }
+}
+```
+Create now the `./hack/nocommit/my-secret.yml` file using the following kubectl command:
+```bash
+kubectl create secret docker-registry quay-cloudservices-pull --from-file=.dockerconfigjson=./hack/nocommit/quay-io-auth.json --dry-run=client -o yaml > ./hack/nocommit/my-secret.yml
+```
 ## QuickLab URL and credentials
 
 ### upi-0.mystone.lab.upshift.rdu2.redhat.com
