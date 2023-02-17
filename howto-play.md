@@ -100,6 +100,21 @@ TODO
 https://quicklab.upshift.redhat.com/clusters/49460
 Username: quicklab
 QUICK_LAB_HOST: upi-0.mystone.lab.upshift.rdu2.redhat.com
+
+Openshift Kubeconfig Located At:
+upi-0.mystone.lab.upshift.rdu2.redhat.com:/home/quicklab/oc4/auth/kubeconfig
+
+Clusterversion Output:
+NAME      VERSION   AVAILABLE   PROGRESSING   SINCE   STATUS
+version   4.12.0    True        False         0s      Cluster version is 4.12.0
+
+OpenShift URL: https://console-openshift-console.apps.mystone.lab.upshift.rdu2.redhat.com
+
+OpenShift Credentials: (username: password)
+kubeadmin : 2CvsX-vR4m2-dwkVi-wEbGM
+
+open https://console-openshift-console.apps.mystone.lab.upshift.rdu2.redhat.com
+open https://openshift-gitops-server-openshift-gitops.apps.mystone.lab.upshift.rdu2.redhat.com
 ```
 
 ### upi-0.snowdrop.lab.psi.pnq2.redhat.com
