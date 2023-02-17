@@ -43,20 +43,23 @@ kubecontext admin
 
 ### Deploy the backend
 
-Clone locally the fork of the git repository: `https://github.com/redhat-appstudio/infra-deployments/`
+Before to execute the command described hereafter, it is first needed to fork this git repository: `https://github.com/redhat-appstudio/infra-deployments/`
+within your `GIT_HUB_ORG`. This forked project will be used by argocd to sync the resources to be installed and the installation script will create/commit a branch top of it !
+
+Git clone locally either the forked project (if you plan to develop) or the parent project: `git clone https://github.com/redhat-appstudio/infra-deployments.git`
 
 Create the NFS Storage Class on ocp4 by executing the following script. This storage class will be used to create the Persistent volumes from PVC requests
 automatically:
 ```bash
-cd infra-deployments-fork
+cd infra-deployments(-fork)
 ./hack/quicklab/setup-nfs-quicklab.sh $QUICK_LAB_HOST
 ```
 
 We can now configure the `preview.env` file (`cp hack/preview-template.env hack/preview.env`) which contains different 
 variables needed to by example download images from docker hub, push the build images to a registry,
-setup the github org hosting the forked projects containing the argocd resources, etc.
+setup the github org hosting the forked project containing the argocd resources, etc.
 
-The most important keys are:
+The most important keys to configure are:
 ```text
 export MY_GIT_FORK_REMOTE=git@github.com:<GITHUB_ORG>/infra-deployments.git
 export MY_GITHUB_TOKEN=<PERSONAL GITHUB TOKEN>
