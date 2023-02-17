@@ -4,7 +4,7 @@ In order to play with Stonesoup, we need an ocp4 cluster with 3 nodes and 3 work
 using the application: `https://quicklab.upshift.redhat.com/`.
 
 Select as template: `openshift4upi` and this region `osp_lab-ci-rdu2-a` to create the VMs.
-When the VMs are ready, then install the cluster using the button `New bundle` and ``
+When the VMs are ready, then install the cluster using the button `New bundle` and `openshift4upi`.
 
 **Note**: Select the region `osp_lab-ci-rdu2-a` as it offers more cpu/memory than asian region
 
@@ -19,7 +19,7 @@ ssh -i quicklab.key -o "UserKnownHostsFile /dev/null" -o "StrictHostKeyChecking 
 Next, retrieve the kubeconfig file and merge it locally within your `.kube/config` file
 
 ```bash
-QUICK_LAB_HOST=upi-0.snowdrop.lab.psi.pnq2.redhat.com
+QUICK_LAB_HOST=<QUICK_LAB_HOSTNAME>
 ./qlssh.sh $QUICK_LAB_HOST "cat /home/quicklab/oc4/auth/kubeconfig" > ql_ocp4.cfg
 
 konfig merge --save ql_ocp4.cfg
@@ -62,129 +62,6 @@ open https://console-openshift-console.apps.$QUICK_LAB_DOMAIN
 open https://openshift-gitops-server-openshift-gitops.apps.$QUICK_LAB_DOMAIN
 ```
 
-### Remotely
-```
-cd /Users/cmoullia/code/redhat-appstudio
-QUICK_LAB_HOST=upi-0.snowdrop.lab.upshift.rdu2.redhat.com
-ssh -i quicklab.key -o "UserKnownHostsFile /dev/null" -o "StrictHostKeyChecking no" -o "IdentitiesOnly=yes" quicklab@$QUICK_LAB_HOST
-sudo yum install wget git
-sudo yum-config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
-sudo yum install gh
-
-cat <<EOF > mytoken.txt
-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
-EOF
-gh auth login --with-token < mytoken.txt
-
-git config --global user.name "Charles Moulliard"
-git config --global user.email cmoulliard@redhat.com
-
-ssh-keygen -t ed25519 -C "cmoulliard@redhat.com"
-gh ssh-key delete -t stonesoup
-gh ssh-key add ~/.ssh/id_ed25519.pub -t stonesoup
-
-mkdir stonesoup && cd stonesoup
-wget https://github.com/mikefarah/yq/releases/download/v4.30.7/yq_linux_386.tar.gz
-tar -vxf yq_linux_386.tar.gz && sudo cp ./yq_linux_386 /usr/local/bin/yq
-
-git clone git@github.com:ch007m/infra-deployments.git && cd infra-deployments
-cat <<EOF > hack/preview.env
-# Required
-## Git remote repo name where is your fork where to push the changes.
-## List of remotes -> git remote -v
-## Example value: origin
-export MY_GIT_FORK_REMOTE=git@github.com:ch007m/infra-deployments.git
-
-## HAS enable github integration
-### Your GITHUB organization where to manage repositories by HAS
-export MY_GITHUB_ORG=ch007m
-### Personal API token with repo and delete_repo permission
-export MY_GITHUB_TOKEN=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
-
-# Optional
-
-## HAS enable github integration
-### Override default Application service "image push" repository
-export HAS_DEFAULT_IMAGE_REPOSITORY=
-### Override Application service image
-export HAS_IMAGE_REPO=
-export HAS_IMAGE_TAG=
-export HAS_PR_OWNER=
-export HAS_PR_SHA=
-### Override Build service image
-export BUILD_SERVICE_IMAGE_REPO=
-export BUILD_SERVICE_IMAGE_TAG=
-export BUILD_SERVICE_PR_OWNER=
-export BUILD_SERVICE_PR_SHA=
-### Override JVM Build service image
-export JVM_BUILD_SERVICE_IMAGE_REPO=
-export JVM_BUILD_SERVICE_IMAGE_TAG=
-export JVM_BUILD_SERVICE_PR_OWNER=
-export JVM_BUILD_SERVICE_PR_SHA=
-export JVM_BUILD_SERVICE_CACHE_IMAGE=
-export JVM_BUILD_SERVICE_REQPROCESSOR_IMAGE=
-### Override the default Tekton bundle
-export DEFAULT_BUILD_BUNDLE=
-
-## Integration service
-### Change of the image
-export INTEGRATION_IMAGE_REPO=
-export INTEGRATION_IMAGE_TAG=
-export INTEGRATION_RESOURCES=
-
-## Release service
-### Change of the image
-export RELEASE_IMAGE_REPO=
-export RELEASE_IMAGE_TAG=
-export RELEASE_RESOURCES=
-
-## SPI integration
-### Based on https://github.com/redhat-appstudio/service-provider-integration-operator#configuration
-export SHARED_SECRET= # Random string
-export SPI_TYPE= # GitHub
-export SPI_CLIENT_ID=
-export SPI_CLIENT_SECRET=
-### Change of the image
-# Operator
-export SPI_OPERATOR_IMAGE_REPO=
-export SPI_OPERATOR_IMAGE_TAG=
-# Oauth
-export SPI_OAUTH_IMAGE_REPO=
-export SPI_OAUTH_IMAGE_TAG=
-### The API server SPI should use to perform cluster requests. This should be the same as the API server
-### used by HAC.
-export SPI_API_SERVER=
-
-## Application management
-### Deploy only listed applications
-export DEPLOY_ONLY=""
-
-## Docker.io authenticated - to avoid pull limits
-### Format username:access_token, eg. mkovarik:59028532-a374-11ec-989b-98fa9b70b53f
-export DOCKER_IO_AUTH="cmoulliard:dckr_pat_PkR5WbHkNxlthe0QyOeeFRwzH4A"
-
-
-## Pipelines as Code integration
-### Instructions for PaC GitHub application creation - https://pipelinesascode.com/docs/install/github_apps/#setup
-### Webhook url, webhook secret is managed by preview.sh
-### pipelines-as-code-secret is created by preview.sh
-export PAC_GITHUB_APP_PRIVATE_KEY= # Base64 encoded private key of the GitHub APP
-export PAC_GITHUB_APP_ID= # Application ID
-
-# GitHub webhook integration (alternative to the GitHub PaC application)
-# See https://pipelinesascode.com/docs/install/github_webhook/#setup-git-repository for the required token permissions
-# MY_GITHUB_TOKEN is used as fallback
-export PAC_GITHUB_TOKEN=
-
-# GitLab webhook integration
-# See https://pipelinesascode.com/docs/install/gitlab/#create-gitlab-personal-access-token for the required token permissions
-export PAC_GITLAB_TOKEN=
-EOF
-
-./hack/quicklab/setup-nfs-quicklab.sh $QUICK_LAB_HOST
-./hack/bootstrap-cluster.sh preview
-```
-
 ## QuickLab URL and credentials
 
 ### upi-0.mystone.lab.upshift.rdu2.redhat.com
@@ -192,7 +69,6 @@ EOF
 https://quicklab.upshift.redhat.com/clusters/49460
 Username: quicklab
 QUICK_LAB_HOST: upi-0.mystone.lab.upshift.rdu2.redhat.com
-
 
 ### upi-0.snowdrop.lab.psi.pnq2.redhat.com
 
