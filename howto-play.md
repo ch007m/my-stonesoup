@@ -45,12 +45,20 @@ QUICK_LAB_HOST=<QUICK_LAB_HOSTNAME>
 ```
 
 Edit the `config/$QUICK_LAB_HOST.cfg` file to rename the context from `admin` to your quicklab host by example (e.g mystone)
+```text
+contexts:
+- context:
+    cluster: mystone
+    user: admin
+  name: mystone
+current-context: mystone
+```
+
+Import the context and switch to use it
 ```bash
 konfig import --save config/$QUICK_LAB_HOST.cfg
 kubectx mystone
 ```
-
-Log in to the ocp cluster using the token available from the UI at the url: https://oauth-openshift.apps.mystone.lab.upshift.rdu2.redhat.com/oauth/token/request
 
 ### Deploy the backend
 
