@@ -70,11 +70,14 @@ We can now deploy the backend part of stonesoup by executing the following bash 
 ./hack/bootstrap-cluster.sh --toolchain --keycloak preview
 ```
 
-**Warning**: If you use an image repository and the env ar `HAS_DEFAULT_IMAGE_REPOSITORY` has been defined, 
-create then a shared secret as such: 
+**Warning**: If you use an image repository and that you set the ENV VAR: `HAS_DEFAULT_IMAGE_REPOSITORY`, then 
+create a [shared secret](https://github.com/redhat-appstudio/infra-deployments/tree/main/components/build-service#use-sharedsecret-with-tekton-chains)
+as such using the docker configuration that you can get from: https://quay.io/organization/<QUAY_USER>?tab=robots.
+Do not forget to specify as registry under `auths`: `"quay.io/<QUAY_USER>": {` nd not `"quay.io": {`
 ```bash
 kubectl create secret docker-registry -n build-templates redhat-appstudio-user-workload --from-file=.dockerconfigjson=.config/quay_dockercfg.json
 ```
+
 
 Open the ocp & argocd console
 ```text
