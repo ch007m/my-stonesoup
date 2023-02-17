@@ -1,4 +1,14 @@
-## Quicklab & Stonesoup
+# Stonesoup installation
+
+* [Quicklab](#quicklab)
+* [QuickLab URL and credentials](#quicklab-url-and-credentials)
+    * [upi-0.mystone.lab.upshift.rdu2.redhat.com](#upi-0mystonelabupshiftrdu2redhatcom)
+    * [upi-0.snowdrop.lab.psi.pnq2.redhat.com](#upi-0snowdroplabpsipnq2redhatcom)
+* [CRC](#crc)
+    * [Instructions](#instructions)
+* [Tips](#tips)
+
+## Quicklab
 
 In order to play with Stonesoup, we need an ocp4 cluster with 3 nodes and 3 workers. It can be created
 using the application: `https://quicklab.upshift.redhat.com/`.
@@ -92,12 +102,6 @@ open https://console-openshift-console.apps.snowdrop.lab.upshift.rdu2.redhat.com
 open https://openshift-gitops-server-openshift-gitops.apps.snowdrop.lab.upshift.rdu2.redhat.com
 ```
 
-### Tips
-
-```bash
-k get pod -o=json | jq '.items[]|select(any( .status.containerStatuses[]; .state.waiting.reason=="ImagePullBackOff"))|.metadata.name'
-```
-
 ## CRC
 
 https://crc.dev/crc/#introducing_gsg
@@ -170,4 +174,10 @@ crc stop
 crc config set consent-telemetry no
 crc config set disk-size 512
 crc start
+```
+
+## Tips
+
+```bash
+k get pod -o=json | jq '.items[]|select(any( .status.containerStatuses[]; .state.waiting.reason=="ImagePullBackOff"))|.metadata.name'
 ```
