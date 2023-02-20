@@ -174,7 +174,7 @@ Do not forget to include your <QUAY_USER> as part of the auth URL (e.g. `auths`:
 kubectl create secret docker-registry -n build-templates redhat-appstudio-user-workload --from-file=.dockerconfigjson=./config/quay_dockercfg.json
 ```
 
-When done, you can create a component and check the build summary !
+When done, you can create a component and check the build summary from the stonesoup ui: https://upi-0.apps.mystone.lab.upshift.rdu2.redhat.com/hac/stonesoup !
 
 ## QuickLab URL and credentials
 
