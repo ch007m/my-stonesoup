@@ -89,6 +89,10 @@ export HAS_DEFAULT_IMAGE_REPOSITORY=quay.io/<QUAY_USER>/<REPOSITORY>
 export DOCKER_IO_AUTH=<Format username:access_token>
 ```
 
+The Github Personal Access Token must have the following rights
+
+![](pat_rights.png)
+
 Next, deploy the backend part of stonesoup by executing the following bash script
 ```bash
 ./hack/bootstrap-cluster.sh --toolchain --keycloak preview
