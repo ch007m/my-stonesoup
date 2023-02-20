@@ -8,6 +8,7 @@ The chapters 1 to 4 will be delivered at Summit 2023
 ## General information
 
 - Onboarding (chat, ...): https://docs.google.com/document/d/11TcnrLDJjFUgsMtKwC8vh9AC3APCMdQ7XHB2nLJqkR8
+- Accessing Staging environment (UI, oc): https://docs.google.com/document/d/1hFvQDH1H6MGNqTGfcZpyl2h8OIaynP8sokZohCS0Su0/edit#heading=h.olhho0rpp8t5
 - User journeys: https://docs.google.com/document/d/14vBqCBA5Y_HYNMuE_krQzBsE97OIR5MIovYgvR5-7Zs
 - Architecture deep dive: https://docs.google.com/document/d/1hT1EV-z4iKCDji6em8QRfUzZtVhGSjUswk_eh1odoc4/
 - HAS Architecture: https://docs.google.com/document/d/1axzNOhRBSkly3M2Y32Pxr1MBpBif2ljb-ufj0_aEt74
