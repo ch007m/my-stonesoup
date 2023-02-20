@@ -100,7 +100,6 @@ Do not forget to specify as registry under `auths`: `"quay.io/<QUAY_USER>": {` n
 kubectl create secret docker-registry -n build-templates redhat-appstudio-user-workload --from-file=.dockerconfigjson=.config/quay_dockercfg.json
 ```
 
-
 Open the ocp & argocd console
 ```text
 open https://console-openshift-console.apps.$QUICK_LAB_DOMAIN
@@ -127,38 +126,41 @@ Create now the `./hack/nocommit/my-secret.yml` file using the following kubectl 
 kubectl create secret docker-registry quay-cloudservices-pull --from-file=.dockerconfigjson=./hack/nocommit/quay-io-auth.json --dry-run=client -o yaml > ./hack/nocommit/my-secret.yml
 ```
 
-Generate the `FrontendEnvironment` CRD using the script `./hack/update-sso.sh` where the ....
+Generate the `FrontendEnvironment` CRD using the script `./hack/update-sso.sh` to configure the dev-sso auth domain, hostname
+and commit the change within your branch
+
+**Warning**: Edit manually the generated file `components/hac-boot/environment.yaml` to fix the hostname field and append the VM hostname before the domain !
 
 Git clone the following project `clowder` with the parent folder:
 ```bash
 cd ..
 git clone https://github.com/RedHatInsights/clowder.git
 ```
-**Warning**: If minikube executable is installed locally on your machine, then hack the script `../clowder/build/kube_setup.sh`
-to change the test from `elif command -v minikube; then` to `elif command -v minikubeeeeee; then` to avoid that the script executes the kubectl commands using minikube !
-
 Git clone the following project `crc-k8s-proxy` with the parent folder:
 
 ```bash
 git clone https://github.com/jduimovich/crc-k8s-proxy.git
 ```
 
-Create an `envfile` file from the `./envfile-template-keycloak` template and set the following 2 parameters `HOSTNAME` and `TOKEN`
+Create an `envfile` file from the `./envfile-template-local-cluster` template and set the following 2 parameters `HOSTNAME` and `TOKEN`
 ```text
 KEYCLOAK_URL=http://keycloak-svc.dev-sso.svc:8080/auth/realms/redhat-external
-HOSTNAME=<QUICK_LAB_HOSTNAME>
+HOSTNAME=computed
 PROXYSSL=false
 SSL=true
 MODE=complex
 TOKEN=<OCP_LOGIN_TOKEN>
 K8SURL=https://kubernetes.default.svc
 ```
-Hack the file `./run-util` and comment the following line 
-```text
--kubectl config  use-context  "default/api-crc-testing:6443/kubeadmin"
-+# kubectl config  use-context  "default/api-crc-testing:6443/kubeadmin"
+
+Customize the `standalone-hac-fork` forked repo to point to your branch and commit the change by running this script `./hack/update-app-revisions`
+
+Replace the hard coded `repoURL` using as git repo `https://github.com/jduimovich/standalone-hac.git` with your forked git repo
+
+Execute now this script to install crowder, crc-k8s-proxy and hac-dev:
+```bash
+./hack/install.sh
 ```
-TODO
 
 ## QuickLab URL and credentials
 
