@@ -5,12 +5,14 @@
   * [Cluster setup](#cluster-setup)
   * [Deploy the backend](#deploy-the-backend)
   * [Install the frontend](#install-the-frontend)
+  * [Post installation](#post-installation)
 * [QuickLab URL and credentials](#quicklab-url-and-credentials)
   * [upi-0.mystone.lab.upshift.rdu2.redhat.com](#upi-0mystonelabupshiftrdu2redhatcom)
   * [upi-0.snowdrop.lab.psi.pnq2.redhat.com](#upi-0snowdroplabpsipnq2redhatcom)
 * [CRC](#crc)
   * [Instructions](#instructions)
 * [Tips](#tips)
+
 
 ## Pre-requisite
 
@@ -92,14 +94,6 @@ Next, deploy the backend part of stonesoup by executing the following bash scrip
 ./hack/bootstrap-cluster.sh --toolchain --keycloak preview
 ```
 
-**Warning**: If you use an image repository and that you set the ENV VAR: `HAS_DEFAULT_IMAGE_REPOSITORY`, then 
-create a [shared secret](https://github.com/redhat-appstudio/infra-deployments/tree/main/components/build-service#use-sharedsecret-with-tekton-chains)
-as such using the docker configuration that you can get from: https://quay.io/organization/<QUAY_USER>?tab=robots.
-Do not forget to specify as registry under `auths`: `"quay.io/<QUAY_USER>": {` nd not `"quay.io": {`
-```bash
-kubectl create secret docker-registry -n build-templates redhat-appstudio-user-workload --from-file=.dockerconfigjson=.config/quay_dockercfg.json
-```
-
 Open the ocp & argocd console
 ```text
 open https://console-openshift-console.apps.$QUICK_LAB_DOMAIN
@@ -161,6 +155,26 @@ Execute now this script to install crowder, crc-k8s-proxy and hac-dev:
 ```bash
 ./hack/install.sh
 ```
+
+### Post installation
+
+To build an application and push the image to `quay.io` registry, some additional steps are needed as described hereafter:
+
+Configure within the `preview.env` file of your `infra-deployments-fork` git repository the following variable where yu pass your <QUAY_USER> followed
+by the repository where the images should be pushed
+```text
+export HAS_DEFAULT_IMAGE_REPOSITORY=quay.io/ch007m/stonesoup
+```
+
+Next, create a [shared secret](https://github.com/redhat-appstudio/infra-deployments/tree/main/components/build-service#use-sharedsecret-with-tekton-chains)
+using the docker configuration that you can get from: https://quay.io/organization/<QUAY_USER>?tab=robots.
+
+Do not forget to include your <QUAY_USER> as part of the auth URL (e.g. `auths`: `"quay.io/<QUAY_USER>": {`)
+```bash
+kubectl create secret docker-registry -n build-templates redhat-appstudio-user-workload --from-file=.dockerconfigjson=./config/quay_dockercfg.json
+```
+
+When done, you can create a component and check the build summary !
 
 ## QuickLab URL and credentials
 
