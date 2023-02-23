@@ -15,7 +15,7 @@ function create-component {
   GIT_URL=$1
   REPO=$(echo $GIT_URL | grep -o '[^/]*$')
   NAME=${REPO%%.git}
-  [ -z "$SKIP_OUTPUT_IMAGE" ] && IMAGE=quay.io/redhat-appstudio/user-workload:$NAME
+  [ -z "$SKIP_OUTPUT_IMAGE" ] && IMAGE=quay.io/ch007m/stonesoup:$NAME
   kubectl delete --ignore-not-found component $NAME
   [ -n "$SKIP_INITIAL_CHECKS" ] && ANNOTATE_SKIP_INITIAL_CHECKS='| (.metadata.annotations.skip-initial-checks="true")'
   yq e "(.metadata.name=\"$NAME\") | (.spec.componentName=\"$NAME\") | (.spec.source.git.url=\"$GIT_URL\") | (.spec.containerImage=\"$IMAGE\") | (.metadata.annotations.pipelinesascode=\"$PIPELINESASCODE\") $ANNOTATE_SKIP_INITIAL_CHECKS" $SCRIPTDIR/templates/component.yaml | kubectl apply -f-

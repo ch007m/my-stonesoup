@@ -160,6 +160,11 @@ Execute now this script to install crowder, crc-k8s-proxy and hac-dev:
 ./hack/install.sh
 ```
 
+URL to be used to register and got the oc login token: https://registration-service-toolchain-host-operator.apps.mystone.lab.upshift.rdu2.redhat.com/
+```text
+oc login --token=eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJDaDRxMkg4U2kya1BJc0F6ZHZCRzRuUW5Kcm5ZWUpVZXB3WHpPRkVIanhvIn0.eyJleHAiOjE2NzY5OTQxMjAsImlhdCI6MTY3Njk4NjkyMCwiYXV0aF90aW1lIjoxNjc2OTg2ODQ3LCJqdGkiOiIzMTc4Y2ZjMS0zYmNkLTRhMTItYmEyYy1jMjEzZGMyMmZiZDkiLCJpc3MiOiJodHRwczovL2tleWNsb2FrLWRldi1zc28uYXBwcy5teXN0b25lLmxhYi51cHNoaWZ0LnJkdTIucmVkaGF0LmNvbS9hdXRoL3JlYWxtcy9yZWRoYXQtZXh0ZXJuYWwiLCJhdWQiOiJjbG91ZC1zZXJ2aWNlcyIsInN1YiI6InVzZXIxIiwidHlwIjoiSUQiLCJhenAiOiJjbG91ZC1zZXJ2aWNlcyIsIm5vbmNlIjoiMDA5MjNlZDEtY2YxNC00ZjZhLTliMGQtMTMzNjI2NTk3ZjIyIiwic2Vzc2lvbl9zdGF0ZSI6IjY5MzM4YzI2LTM5NmMtNGRiNS04MDg0LTliNmJhYWE4ZjYwMiIsImF0X2hhc2giOiJldWJ5OFRsbTNBU252eVpRQ0hJb3hnIiwiYWNyIjoiMCIsInNpZCI6IjY5MzM4YzI2LTM5NmMtNGRiNS04MDg0LTliNmJhYWE4ZjYwMiIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoidXNlcjEiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJ1c2VyMSIsImdpdmVuX25hbWUiOiJ1c2VyMSIsImVtYWlsIjoidXNlcjFAdXNlci51cyJ9.DrkIjina0o0H2MZw4O2XbnSJnUX2eUwjA9M3g0q3cJFVhSXxJcSYJ6mVory2Qwb04CnIOvcDqdHV3dgmxIUoZ1eugcsWKcO9hX57Gz3i_DgGaCOO5im7Qa7XlkZxDnIMmTzx7oNHbQeuvYgORwVIbR9WdiJwWY4QCuHAlXgPNurotjgwBFECEn2igQwVzlBod89W4IdD2a79FNrPgv8RHfiWrvSjQqglp7ZquC8VEFxG_rAQoFPUc6KHxAZmfQ25I4qHDXIlhAWJ9WKUiS8psJ_7ZVywT8lkJhO1Hh90uhP_S0qv1TzjK16JpuUQcHDoHMBdSC4BuHtYh78wdi_DwA --server=https://api-toolchain-host-operator.apps.mystone.lab.upshift.rdu2.redhat.com
+```
+
 ### Post installation
 
 To build an application and push the image to `quay.io` registry, some additional steps are needed as described hereafter:
@@ -176,9 +181,33 @@ using the docker configuration that you can get from: https://quay.io/organizati
 Do not forget to include your <QUAY_USER> as part of the auth URL (e.g. `auths`: `"quay.io/<QUAY_USER>": {`)
 ```bash
 kubectl create secret docker-registry -n build-templates redhat-appstudio-user-workload --from-file=.dockerconfigjson=./config/quay_dockercfg.json
+kubectl delete secret redhat-appstudio-staginguser-pull-secret -n user1-tenant
+kubectl create secret docker-registry redhat-appstudio-staginguser-pull-secret -n user1-tenant --from-file=.dockerconfigjson=./config/quay_dockercfg.json
 ```
 
 When done, you can create a component and check the build summary from the stonesoup ui: https://upi-0.apps.mystone.lab.upshift.rdu2.redhat.com/hac/stonesoup !
+
+Some components can also be created automatically using the following bash script:
+
+
+### Issue
+
+The standalone installation fails to deploy a component as some JS errors are reported within the url: https://upi-0.apps.mystone.lab.upshift.rdu2.redhat.com/hac/stonesoup/applications/snowdrop/environments
+```text
+at q (https://upi-0.apps.mystone.lab.upshift.rdu2.redhat.com/api/plugins/hac-dev/js/8026.1675175304819.20fcd6de7318327d51d9.js:1:14627)
+    at B (https://upi-0.apps.mystone.lab.upshift.rdu2.redhat.com/api/plugins/hac-dev/js/8026.1675175304819.20fcd6de7318327d51d9.js:1:16958)
+    at Tn (https://upi-0.apps.mystone.lab.upshift.rdu2.redhat.com/api/plugins/hac-dev/js/exposed-ApplicationDetails.1675175304819.20fcd6de7318327d51d9.js:1:45307)
+    at section
+    at h (https://upi-0.apps.mystone.lab.upshift.rdu2.redhat.com/api/plugins/hac-dev/js/1385.1675175304819.20fcd6de7318327d51d9.js:1:3093)
+    at I (https://upi-0.apps.mystone.lab.upshift.rdu2.redhat.com/api/plugins/hac-dev/js/1385.1675175304819.20fcd6de7318327d51d9.js:1:6123)
+    at section
+    at d (https://upi-0.apps.mystone.lab.upshift.rdu2.redhat.com/api/plugins/hac-dev/js/132.1675175304819.20fcd6de7318327d51d9.js:2:22927)
+    at div
+...
+```
+According to Karthik, The setup is using some old gitops components where snapshotEnvironmentBinding  does not contain componentDeploymentConditions in its status but the UI  component is newer version that expects this property
+
+Long thread discussion took place around that here: https://redhat-internal.slack.com/archives/C038DJAP7HR/p1676904953292189
 
 ## QuickLab URL and credentials
 

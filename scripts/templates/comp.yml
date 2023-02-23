@@ -1,0 +1,23 @@
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Component
+metadata:
+  annotations:
+    appstudio.openshift.io/pac-provision: done
+  name: stonesoup-spring-boot-666
+  namespace: cmoullia
+spec:
+  application: sb
+  componentName: stonesoup-spring-boot-666
+  containerImage: quay.io/redhat-appstudio/user-workload:cmoullia-stonesoup-spring-boot-666
+  replicas: 1
+  resources:
+    requests:
+      cpu: 10m
+      memory: 180Mi
+  source:
+    git:
+      context: ./
+      devfileUrl: https://raw.githubusercontent.com/ch007m/stonesoup-spring-boot/main/devfile.yaml
+      dockerfileUrl: https://raw.githubusercontent.com/ch007m/stonesoup-spring-boot/main/docker/Dockerfile
+      url: https://github.com/ch007m/stonesoup-spring-boot.git
+  targetPort: 8081
