@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
 
+# Get the list of the secrets defined within the Service Account
+# Extract for each secret the dockercfg or dockercfgjson file
+# Decode using base64 the content of the file
+
 SCRIPTS_DIR="$(cd $(dirname "${BASH_SOURCE}") && pwd)"
 
-CMD=$(kubectl get sa/pipeline -ojson | jq -cr '.secrets[] | .name')
+SA=${1:-pipeline}
+
+CMD=$(kubectl get sa/$SA -ojson | jq -cr '.secrets[] | .name')
 
 for row in $CMD; do
   printf %"s\n" "-----------------------------------------------"
