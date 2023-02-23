@@ -2,17 +2,25 @@
 
 SCRIPTS_DIR="$(cd $(dirname "${BASH_SOURCE}") && pwd)"
 
-source ${SCRIPTS_DIR}/common.sh
-source ${SCRIPTS_DIR}/play.sh
-
-# Parameters to play the demo
-TYPE_SPEED="100"
-NO_WAIT=true
-
 CMD=$(kubectl get sa/pipeline -ojson | jq -cr '.secrets[] | .name')
 
 for row in $CMD; do
-  p "Secret: $row"
-  kubectl get secret -n user1-tenant $row -ojson | jq -r '.data.".dockerconfigjson"' | base64 -d
-  p "-----------------------------------------------"
+  printf %"s\n" "-----------------------------------------------"
+  echo "Secret: $row"
+  data=$(kubectl get secret -n user1-tenant $row -ojson)
+  secret_type=$(echo $data | jq -r '.type')
+  dockercfg_file_name=$(echo $secret_type | cut -d "/" -f 2)
+
+  case $dockercfg_file_name in
+    "dockerconfigjson")
+      echo $data | jq -r '.data.".dockerconfigjson"' | base64 -d
+      ;;
+
+    "dockercfg")
+      echo $data | jq -r '.data.".dockercfg"' | base64 -d
+      ;;
+    *)
+      p "Not found";;
+  esac
+  printf %"s\n" "-----------------------------------------------"
 done
