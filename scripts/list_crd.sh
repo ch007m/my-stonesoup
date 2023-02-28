@@ -12,9 +12,9 @@ for crd in $(kubectl get crd -o name); do
         echo "CRD: $crd_name" >> ${report_file_name}
         echo "---------------------------------------------" >> ${report_file_name}
         CRDs=$(kubectl get $crd_name -A -o json)
-        printf "%-70s%s\n" NAME NAMESPACE >> ${report_file_name}
+        printf "%-80s%s\n" NAME NAMESPACE >> ${report_file_name}
 
-        eval "$(echo $CRDs | jq -r ' .items[] | [ "printf", "%-70s%s\n", "\(.metadata.name)~", "~\(.metadata.namespace)" ] | @sh' | tr ' ~' ' ')" >> ${report_file_name}
+        eval "$(echo $CRDs | jq -r ' .items[] | [ "printf", "%-80s%s\n", "\(.metadata.name)~", "\(.metadata.namespace)" ] | @sh' | tr ' ~' ' ')" >> ${report_file_name}
         echo "---------------------------------------------" >> ${report_file_name}
         echo "" >> ${report_file_name}
      fi
