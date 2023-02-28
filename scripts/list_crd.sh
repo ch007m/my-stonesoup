@@ -5,7 +5,7 @@ report_file_name="report_crd_${report_date}"
 echo "---------------------------------------------" > ${report_file_name}
 echo "CRD Report"  >> ${report_file_name}
 echo "---------------------------------------------" >> ${report_file_name}
-for crd in $(kubectl get crd -o name); do
+for crd in $(kubectl get crd -o name --sort-by='.metadata.name'); do
      crd_name=$(echo "$crd" | cut -d'/' -f2)
      crd_count=$(kubectl get $crd_name -A -o name | wc -c)
      if (( $crd_count > 0 )); then
