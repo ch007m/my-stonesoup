@@ -207,11 +207,10 @@ MY_QUAY_USER=ch007m SKIP_INITIAL_CHECKS=true ./hack/build/build-via-appstudio.sh
 
 ### Proxy url
 
-When stonesoup is running behind a firewall, vpn and is not available publicly, then it is needed to use a tool like smee.io, ngrok
-As they act as a proxy, we can configure the Github webhook URL which is usedto trigger from a github commit a new build using pipelineascode
-the URL generated using smee.io
+When stonesoup is running behind a firewall, vpn and is not available publicly, then it is needed to use a tool like https://smee.io, https://ngrok.com/.
+As they act as a proxy, we can configure the Github `Webhook & Home URL` of the Github Application.
 
-Here are the instructions to follow to use smee.io
+Here are the instructions to follow to use `smee.io`
 
 - Click on this link `https://smee.io/new` to populate a new random URL or pass your own (e.g. `https://smee.io/upi-0.apps.mystone.lab.upshift.rdu2.redhat.com)
 - Create a new Github App using as `Webhook URL & Homepage URL` the one created previously (e.g. https://smee.io/upi-0.apps.mystone.lab.upshift.rdu2.redhat.com) according   
@@ -227,6 +226,7 @@ Here are the instructions to follow to use smee.io
 - Create a new app/component and select `custom build` as the scenario to be used to build the component
 
 This scenario do not work: https://issues.redhat.com/browse/STONE-691
+
 ## Demo
 
 ### Prerequisite
