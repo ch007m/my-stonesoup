@@ -208,7 +208,8 @@ MY_QUAY_USER=ch007m SKIP_INITIAL_CHECKS=true ./hack/build/build-via-appstudio.sh
 ### Proxy url
 
 When stonesoup is running behind a firewall, vpn and is not available publicly, then it is needed to use a tool like https://smee.io, https://ngrok.com/.
-As they act as a proxy, we can configure the Github `Webhook & Home URL` of the Github Application.
+As they act as a proxy, we can configure the Github `Webhook & Home URL` of the Github Application to use the smee or ngrok URL instead of the one of your 
+local application.
 
 Here are the instructions to follow to use `smee.io`
 
