@@ -187,27 +187,80 @@ kubectl create secret docker-registry redhat-appstudio-staginguser-pull-secret -
 
 When done, you can create a component and check the build summary from the stonesoup ui: https://upi-0.apps.mystone.lab.upshift.rdu2.redhat.com/hac/stonesoup !
 
-Some components can also be created automatically using the following bash script:
-
-
-### Issue
-
-The standalone installation fails to deploy a component as some JS errors are reported within the url: https://upi-0.apps.mystone.lab.upshift.rdu2.redhat.com/hac/stonesoup/applications/snowdrop/environments
-```text
-at q (https://upi-0.apps.mystone.lab.upshift.rdu2.redhat.com/api/plugins/hac-dev/js/8026.1675175304819.20fcd6de7318327d51d9.js:1:14627)
-    at B (https://upi-0.apps.mystone.lab.upshift.rdu2.redhat.com/api/plugins/hac-dev/js/8026.1675175304819.20fcd6de7318327d51d9.js:1:16958)
-    at Tn (https://upi-0.apps.mystone.lab.upshift.rdu2.redhat.com/api/plugins/hac-dev/js/exposed-ApplicationDetails.1675175304819.20fcd6de7318327d51d9.js:1:45307)
-    at section
-    at h (https://upi-0.apps.mystone.lab.upshift.rdu2.redhat.com/api/plugins/hac-dev/js/1385.1675175304819.20fcd6de7318327d51d9.js:1:3093)
-    at I (https://upi-0.apps.mystone.lab.upshift.rdu2.redhat.com/api/plugins/hac-dev/js/1385.1675175304819.20fcd6de7318327d51d9.js:1:6123)
-    at section
-    at d (https://upi-0.apps.mystone.lab.upshift.rdu2.redhat.com/api/plugins/hac-dev/js/132.1675175304819.20fcd6de7318327d51d9.js:2:22927)
-    at div
-...
+Some components can also be created automatically using the following bash script: 
+```bash
+./scripts/stone.sh
 ```
-According to Karthik, The setup is using some old gitops components where snapshotEnvironmentBinding  does not contain componentDeploymentConditions in its status but the UI  component is newer version that expects this property
+or the [build-via-appstudio.sh](https://github.com/redhat-appstudio/infra-deployments/blob/main/hack/build/build-via-appstudio.sh) script part of the `infra-deployment` project
+where you pass as parameter your Quay.io username
 
-Long thread discussion took place around that here: https://redhat-internal.slack.com/archives/C038DJAP7HR/p1676904953292189
+```bash
+MY_QUAY_USER=ch007m SKIP_INITIAL_CHECKS=true ./hack/build/build-via-appstudio.sh https://github.com/ch007m/stonesoup-spring-boot.git
+```
+
+### Proxy url
+
+When stonesoup is running behind a firewall, vpn and is not available publicly, then it is needed to use a tool like smee.io, ngrok
+As they act as a proxy, we can configure the Github webhook URL which is usedto trigger from a github commit a new build using pipelineascode
+the URL generated using smee.io
+
+Here are the instructions to follow to use smee.io
+
+- Click on this link `https://smee.io/new` to populate a new random URL or pass your own (e.g. `https://smee.io/upi-0.apps.mystone.lab.upshift.rdu2.redhat.com)
+- Create a new Github App using as `Webhook URL & Homepage URL` the one created previously (e.g. https://smee.io/upi-0.apps.mystone.lab.upshift.rdu2.redhat.com) according   
+  to the instructions: https://github.com/openshift-pipelines/pipelines-as-code/blob/main/docs/content/docs/install/github_apps.md#setup-manually
+- Alternatively you can create such a new Github application using a [Manifest Flow](https://docs.github.com/en/apps/creating-github-apps/creating-github-apps/creating-a-github-app-from-a-manifest): https://github.com/rajbos/create-github-app-from-manifest#create-a-github-app-from-a-manifest
+- Deploy next the new Github application created under your Github org (e.g. `ch007m`)
+- Define within the `./hack/preview.env` file the following ENV VAR:
+  ```
+  export PAC_GITHUB_APP_PRIVATE_KEY=
+  export PAC_GITHUB_APP_ID=
+  ```
+- Hack this [script](https://github.com/redhat-appstudio/infra-deployments/blob/2cfb2a0ca1c4111c8ace5fbce7646f72da4c30fd/hack/build/setup-pac-integration.sh#L66) to use a new ENV VAR which is your `GITHUB APP WEBHOOK_SECRET`
+- Create a new app/component and select `custom build` as the scenario to be used to build the component
+
+This scenario do not work: https://issues.redhat.com/browse/STONE-691
+## Demo
+
+### Prerequisite
+
+To test a GitHub project using our own GitHub org (e.g. ch007m), it is needed to install the following application http://github.com/apps/appstudio-staging-ci.
+This application will not only allow to install the PRs coming from stonesoup but also to trigger a Tekton build if a github commit has been pushed on the repository
+used as `component`.
+
+To access the cluster and to avoid to re-issue a token, use [kubelogin](https://github.com/int128/kubelogin), OIDC and the following [Kubecfg]() to
+access the stonesoup [beta cluster](https://console.redhat.com/beta/hac/stonesoup).
+
+**NOTE**: How to Login & access stonesoup cluster: https://docs.google.com/document/d/1hFvQDH1H6MGNqTGfcZpyl2h8OIaynP8sokZohCS0Su0/edit#heading=h.ba1wkdpj2vdq
+
+### Samples
+
+- Repository where ArgoCD resources are stored: https://github.com/redhat-appstudio-appdata/
+- Collection of demos to play with Stonesoup: https://github.com/jduimovich/appstudio-e2e-demos
+
+### Automate tests
+
+in infra-deployments there is https://github.com/redhat-appstudio/infra-deployments/tree/main/hack/build build-via-appstudio.sh creates basic CR of app and component from templates folder (edited)
+
+If you are feeling adventurous you can dig into our e2e-demo suite and see the resources we create there: https://github.com/redhat-appstudio/e2e-tests/blob/main/tests/e2e-demos/e2e-demo.go
+The suite does the "create application and other necessary resources, wait for build, deploy & check" cycle and is parameterized by applicaitons&components from this yaml
+
+### Setup a new pipeline
+
+https://redhat-internal.slack.com/archives/C04GVLR0155/p1674836372361809
+
+- Start with a PoC in your own repo by modifying the .tekton/pipelinerun definition. Share a demo in the stonesoup weekly meeting (every thursday).
+- After that, we may want to get a task for it defined in https://github.com/redhat-appstudio/build-definitions/tree/main/tasks/ and a separate pipeline definition to refer to that task.
+
+**NOTE**: No UI support currently planned for selecting different pipeline types, but that will have to come.
+
+**NOTE**: Even if your pipelinerun uses a new inline task or refers to a new task that we add to build-definitions,
+it won't necessarily be trusted by the enterprise contract (example: https://github.com/hacbs-contract/ec-policies/pull/291/files ).
+We'll need to evaluate if the new method meets criteria to support the requirements that the policy represents.
+
+## Issue
+
+Empty !
 
 ## QuickLab URL and credentials
 
