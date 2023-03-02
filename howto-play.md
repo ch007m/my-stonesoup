@@ -215,24 +215,88 @@ Here are the instructions to follow to use `smee.io`
 
 - Click on this link `https://smee.io/new` to populate a new random URL or pass your own (e.g. `https://smee.io/upi-0.apps.mystone.lab.upshift.rdu2.redhat.com)
 - Create a new Github App using as `Webhook URL & Homepage URL` the one created previously (e.g. https://smee.io/upi-0.apps.mystone.lab.upshift.rdu2.redhat.com) according   
-  to the instructions: https://github.com/openshift-pipelines/pipelines-as-code/blob/main/docs/content/docs/install/github_apps.md#setup-manually
+  to the following instructions: https://github.com/openshift-pipelines/pipelines-as-code/blob/main/docs/content/docs/install/github_apps.md#setup-manually
 - Alternatively you can create such a new Github application using a [Manifest Flow](https://docs.github.com/en/apps/creating-github-apps/creating-github-apps/creating-a-github-app-from-a-manifest): https://github.com/rajbos/create-github-app-from-manifest#create-a-github-app-from-a-manifest
 - Deploy next the new Github application created under your Github org (e.g. `ch007m`)
 - Define within the `./hack/preview.env` file the following ENV VAR:
   ```
-  export PAC_GITHUB_APP_PRIVATE_KEY=
-  export PAC_GITHUB_APP_ID=
+  export PAC_GITHUB_APP_PRIVATE_KEY=<PRIVATE_KEY_OF_CUSTOM_GITHUB_APP>
+  export PAC_GITHUB_APP_ID=<AP_ID_OF_CUSTOM_GITHUB_APP>
+  export PAC_WEBHOOK_SECRET=<WEBHOOK_SECRET_OF_CUSTOM_GITHUB_APP>
+  export PAC_WEBHOOK_URL=<WEBHOOK_URL_SMEE.IO>
   ```
-- Hack this [script](https://github.com/redhat-appstudio/infra-deployments/blob/2cfb2a0ca1c4111c8ace5fbce7646f72da4c30fd/hack/build/setup-pac-integration.sh#L66) to use a new ENV VAR which is your `GITHUB APP WEBHOOK_SECRET`
+- Hack this [script](https://github.com/redhat-appstudio/infra-deployments/blob/2cfb2a0ca1c4111c8ace5fbce7646f72da4c30fd/hack/build/setup-pac-integration.sh#L66) to use a new ENV VAR:
+  ```bash 
+  ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"/..
+  setup-pac-app() (
+  ...
+  
+  webhook_secret=$PAC_WEBHOOK_SECRET
+  
+  if ! oc get -n pipelines-as-code secret pipelines-as-code-secret &>/dev/null; then
+    token=$(sign rs256 "$payload" "$(echo $PAC_GITHUB_APP_PRIVATE_KEY | base64 -d)")
+    webhook_url=$PAC_WEBHOOK_URL
+    curl \
+    -X PATCH \
+    -H "Accept: application/vnd.github.v3+json" \
+    -H "Authorization: Bearer $token" \
+    https://api.github.com/app/hook/config \
+    -d "{\"content_type\":\"json\",\"insecure_ssl\":\"1\",\"secret\":\"$webhook_secret\",\"url\":\"$webhook_url\"}" &>/dev/null
+  fi
+  
+  )
+  source $ROOT/preview.env
+  ...
+  ```
+- Deploy the gosmee client to redirect the HTTP request from github to the pipeline-as-code service
+  ```bash
+  k delete -n pipelines-as-code deployment/gosmee-client
+  cat <<'EOF' | k apply -f -
+  kind: Deployment
+  apiVersion: apps/v1
+  metadata:
+    name: gosmee-client
+    namespace: pipelines-as-code
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: gosmee-client
+    template:
+      metadata:
+        labels:
+          app: gosmee-client
+      spec:
+        containers:
+          - name: gosmee-client
+            image: 'ghcr.io/chmouel/gosmee:main'
+            args:
+              - client
+              - 'https://smee.io/upi-0.apps.mystone.lab.upshift.rdu2.redhat.com'
+              - $(SVC)
+            env:
+              - name: SVC
+                value: >-
+                          http://pipelines-as-code-controller.pipelines-as-code.svc.cluster.local:8080
+        restartPolicy: Always
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 25%
+        maxSurge: 25%
+    revisionHistoryLimit: 10
+    progressDeadlineSeconds: 600      
+  EOF
+  ```
 - Create a new app/component and select `custom build` as the scenario to be used to build the component
 
-This scenario do not work: https://issues.redhat.com/browse/STONE-691
+This scenario work: https://issues.redhat.com/browse/STONE-691
 
 ## Demo
 
 ### Prerequisite
 
-To test a GitHub project using our own GitHub org (e.g. ch007m), it is needed to install the following application http://github.com/apps/appstudio-staging-ci.
+To test a GitHub project using our own GitHub org (e.g. ch007m), it is needed to install the following application https://github.com/apps/appstudio-staging-ci.
 This application will not only allow to install the PRs coming from stonesoup but also to trigger a Tekton build if a github commit has been pushed on the repository
 used as `component`.
 
