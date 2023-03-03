@@ -20,8 +20,6 @@ Less important but could be nevertheless helpful
 
 ## Components & Architecture
 
-See: https://github.com/redhat-appstudio/book/issues/55
-
 | Name                                                                                                                                                      | Description                                                                                                                                                                                                                       | ArgoCD                                                                                                                         |
 |-----------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
 | [Application API](https://github.com/redhat-appstudio/application-api)                                                                                    | Definition of the CRDs: applicatin, component                                                                                                                                                                                     | [application-api](https://github.com/redhat-appstudio/infra-deployments/tree/main/components/application-api)                  |
@@ -51,6 +49,8 @@ See: https://github.com/redhat-appstudio/book/issues/55
 | [SPI](https://github.com/redhat-appstudio/service-provider-integration-operator/)                                                                         | Kubernetes controller/operator that manages SPI ntegration                                                                                                                                                                        | [spi](https://github.com/redhat-appstudio/infra-deployments/tree/main/components/spi)                                               |
 | [Spray Proxy](https://github.com/redhat-appstudio/sprayproxy)                                                                                             | Reverse proxy to broadcast to multiple backends                                                                                                                                                                                   | [sprayproxy](https://github.com/redhat-appstudio/infra-deployments/tree/main/components/sprayproxy)                                        |
 | Tekton CI                                                                                                                                                 | Project defining the repositories managed by PaC using the github repo and used internally                                                                                                                                        | [tekton-ci](https://github.com/redhat-appstudio/infra-deployments/tree/main/components/tekton-ci)                                         |
+
+Ticket: https://github.com/redhat-appstudio/book/issues/55
 
 ## Installation instructions
 
