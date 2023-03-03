@@ -23,23 +23,7 @@ Less important but could be nevertheless helpful
 - HAS Architecture: https://docs.google.com/document/d/1axzNOhRBSkly3M2Y32Pxr1MBpBif2ljb-ufj0_aEt74
   Component & project: https://github.com/redhat-appstudio/application-service
 
-Application API: https://github.com/redhat-appstudio/application-api
-Build Service: https://github.com/redhat-appstudio/build-service
-Build definition: https://github.com/redhat-appstudio/build-definitions
-JWS Build Service: https://github.com/redhat-appstudio/jvm-build-service/
-
 See: https://github.com/redhat-appstudio/book/issues/55
-
-- GitOps Service
-- Pipeline Service
-- Build Service
-- Workspace and Terminal Service
-- Service Provider Integration
-- Hybrid Application Service
-- Enterprise Contract
-- Java Rebuilds Service
-- Release Service
-- Integration Service
 
 | Name                                                                                                                                                       | Description                                                                                                                                                                                                                       | ArgoCD                                                                                                                         |
 |------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
@@ -60,7 +44,7 @@ See: https://github.com/redhat-appstudio/book/issues/55
 | Image controller                                                                                                                                           |x| [image-controller](https://github.com/redhat-appstudio/infra-deployments/tree/main/components/image-controller)                                  |
 | Integration                                                                                                                                                |x| [integration](https://github.com/redhat-appstudio/infra-deployments/tree/main/components/integration)                                       |
 | Internal services                                                                                                                                          |x| [internal-services](https://github.com/redhat-appstudio/infra-deployments/tree/main/components/internal-services)                                 |
-| JVM Build Service                                                                                                                                          |x| [jvm-build-service](https://github.com/redhat-appstudio/infra-deployments/tree/main/components/jvm-build-service)                                 |
+| [JVM Build Service]( https://github.com/redhat-appstudio/jvm-build-service/)                                                                                                                                          |x| [jvm-build-service](https://github.com/redhat-appstudio/infra-deployments/tree/main/components/jvm-build-service)                                 |
 | Monitoring                                                                                                                                                 |x| [monitoring](https://github.com/redhat-appstudio/infra-deployments/tree/main/components/monitoring)                                        |
 | Pipelines service                                                                                                                                          |x| [pipeline-service](https://github.com/redhat-appstudio/infra-deployments/tree/main/components/pipeline-service)                                  |
 | Quality dashboard                                                                                                                                          |x| [quality-dashboard](https://github.com/redhat-appstudio/infra-deployments/tree/main/components/quality-dashboard)                                 |
