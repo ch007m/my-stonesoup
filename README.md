@@ -1,3 +1,13 @@
+Table of Contents
+=================
+
+* [Stonesoup](#stonesoup)
+  * [Scope/MVP](#scopemvp)
+  * [General information](#general-information)
+  * [Architecture](#architecture)
+  * [Components](#components)
+  * [Installation instructions &amp; Development](#installation-instructions--development)
+
 # Stonesoup
 
 ## Scope/MVP
@@ -17,6 +27,10 @@ Less important but could be nevertheless helpful
 
 - User journeys: https://docs.google.com/document/d/14vBqCBA5Y_HYNMuE_krQzBsE97OIR5MIovYgvR5-7Zs
 - Architecture deep dive: https://docs.google.com/document/d/1hT1EV-z4iKCDji6em8QRfUzZtVhGSjUswk_eh1odoc4/
+
+## Architecture 
+
+The architecture book: https://redhat-appstudio.github.io/book/
 
 ## Components
 
@@ -52,9 +66,8 @@ Less important but could be nevertheless helpful
 
 Ticket: https://github.com/redhat-appstudio/book/issues/55
 
-## Installation instructions
+## Installation instructions & Development
 
 - Installation github repo: https://github.com/redhat-appstudio/infra-deployments
-- Development and installation documentation: https://redhat-appstudio.github.io/infra-deployments/docs/introduction/about.html
-- Architecture book: https://redhat-appstudio.github.io/book/
-- Adding a component: https://redhat-appstudio.github.io/infra-deployments/docs/deployment/extending-the-service.html
+- Development & installation documentation: https://redhat-appstudio.github.io/infra-deployments/docs/introduction/about.html
+- How to add a new ArgoCD component: https://redhat-appstudio.github.io/infra-deployments/docs/deployment/extending-the-service.html
