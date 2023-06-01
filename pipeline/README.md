@@ -1,6 +1,6 @@
 ## How to play with Tekton PipelineAsCode
 
-- Create a kind cluster where you deply an ingress controller and docker registry
+- Create a kind cluster where you deploy an ingress controller and docker registry
 ```bash
 VM_IP=10.0.76.167
 curl -s -L "https://raw.githubusercontent.com/snowdrop/k8s-infra/main/kind/kind.sh" | bash -s install --delete-kind-cluster
@@ -48,7 +48,7 @@ EOF
 kubectl apply -f https://raw.githubusercontent.com/openshift-pipelines/pipelines-as-code/stable/release.k8s.yaml
 ```
 
-- Expose a new rout to allow to access the PipelineAsCode controller externally
+- Expose a new route to allow to access the PipelineAsCode controller externally
 ```bash
 cat <<EOF | kubectl apply -f -
 apiVersion: networking.k8s.io/v1
@@ -105,7 +105,7 @@ EOF
 
 ## Set up a GitHub App
 
-To forward the Github events (commit, PR, etc) to Tekton PipelineAsCode it is needed to create a [GithubApp](https://pipelinesascode.com/docs/install/github_apps/).
+To forward the GitHub events (commit, PR, etc) to Tekton PipelineAsCode it is needed to create a [GithubApp](https://pipelinesascode.com/docs/install/github_apps/).
 That could be done manually as described [here](https://pipelinesascode.com/docs/install/github_apps/#setup-manually) or using the `tkn-pac bootstrap github-app` client
 as showed hereafter:
 
@@ -210,7 +210,7 @@ kubectl create clusterrolebinding admin-sa-default-quarkus-demo --clusterrole=ad
 
 ## Buildpacks build
 
-Scen    rio to be executed to test the Tekton Buildpack build
+Scenario to be executed to test the Tekton Buildpack build
 
 ```bash
 BRANCH_NAME=pac-buildpack-test
